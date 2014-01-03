@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BlueBikeActivity</string>
+    <string name="app_name">BlueBike</string>
+
+    <!-- Widget strings -->
+    <string name="button_scan">Scan</string>
+    <string name="button_read">Read</string>
+
+    <!-- Messages -->
+    <string name="msg_ble_notsupp">Bluetooth LE is not supported</string>
+    <string name="msg_bt_disabled">Bluetooth is disabled</string>
+    <string name="msg_err_scantimeout">Scanning timed out</string>
+    <string name="msg_err_noscan">No device scanned yet</string>
 </resources>

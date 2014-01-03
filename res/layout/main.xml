@@ -4,10 +4,19 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-<TextView
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/button_scan"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:text="Hello World, BlueBikeActivity"
+    android:text="@string/button_scan"
+    android:onClick="startScan" />
+    />
+<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/button_read"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/button_read"
+    android:onClick="startRead" />
     />
 </LinearLayout>
 
