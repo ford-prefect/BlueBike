@@ -3,8 +3,17 @@
     <string name="app_name">BlueBike</string>
 
     <!-- Widget strings -->
-    <string name="button_scan">Scan</string>
-    <string name="button_read">Read</string>
+    <string name="device_label">Device</string>
+    <string name="wheel_size_label">Wheel</string>
+    <string name="speed_label">Speed</string>
+    <string name="cadence_label">Cadence</string>
+    
+    <string-array name="wheel_size_array">
+        <item>ISO 622mm (29", 700C)</item>
+        <item>ISO 559mm (26")</item>
+        <item>ISO 571mm (26", 650C)</item>
+        <item></item>
+    </string-array>
 
     <!-- Messages -->
     <string name="msg_ble_notsupp">Bluetooth LE is not supported</string>

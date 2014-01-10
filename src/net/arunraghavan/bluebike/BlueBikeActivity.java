@@ -30,6 +30,8 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import net.arunraghavan.bluebikelib.BlueBikeSensor;
@@ -49,6 +51,9 @@ public class BlueBikeActivity extends Activity
     private boolean mScanning;
     private Handler mHandler;
 
+    private boolean hasSpeed, hasCadence;
+    private double instSpeed, instCadence;
+
     private BlueBikeSensor.Callback mCallback;
 
     /** Called when the activity is first created. */
@@ -58,7 +63,15 @@ public class BlueBikeActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        // Initialise the wheel size spinner
+        Spinner wheelSpinner = (Spinner) findViewById(R.id.wheelSizeList);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.wheel_size_array,
+                android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        wheelSpinner.setAdapter(adapter);
+
         mHandler = new Handler();
+
         mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
             @Override
             public void onLeScan(BluetoothDevice device, int rssi, byte[] scanRecord)
@@ -70,10 +83,11 @@ public class BlueBikeActivity extends Activity
                     @Override
                     public void run()
                     {
-                        Toast.makeText(BlueBikeActivity.this, "Using device " + BlueBikeActivity.this.mBluetoothDevice,
-                            Toast.LENGTH_LONG).show();
+                        // FIXME: update device list, update UI
                     }
                 });
+
+                startRead();
             }
         };
 
@@ -81,8 +95,10 @@ public class BlueBikeActivity extends Activity
             @Override
             public void onConnectionStateChange(BlueBikeSensor sensor, BlueBikeSensor.ConnectionState newState)
             {
+                BlueBikeActivity parent = BlueBikeActivity.this;
+
                 if (newState == BlueBikeSensor.ConnectionState.ERROR) {
-                    BlueBikeActivity.this.runOnUiThread(new Runnable() {
+                    parent.runOnUiThread(new Runnable() {
                         @Override
                         public void run()
                         {
@@ -93,35 +109,44 @@ public class BlueBikeActivity extends Activity
                     mSensor = null;
 
                 } else if (newState == BlueBikeSensor.ConnectionState.CONNECTED) {
-                    BlueBikeActivity.this.runOnUiThread(new Runnable() {
+                    parent.hasSpeed = parent.mSensor.hasSpeed();
+                    parent.hasSpeed = parent.mSensor.hasCadence();
+
+                    parent.runOnUiThread(new Runnable() {
                         @Override
                         public void run()
                         {
-                            String status = String.format("Speed: %s, Cadence: %s",
-                                BlueBikeActivity.this.mSensor.hasSpeed() ? "yes" : "no",
-                                BlueBikeActivity.this.mSensor.hasCadence() ? "yes" : "no");
-                            Toast.makeText(BlueBikeActivity.this, status, Toast.LENGTH_LONG).show();
+                            // FIXME: trigger UI update
                         }
                     });
 
-                    BlueBikeActivity.this.mSensor.setNotificationsEnabled(true);
+                    parent.mSensor.setNotificationsEnabled(true);
                 }
             }
 
             @Override
             public void onSpeedUpdate(BlueBikeSensor sensor, double distance, double elapsedUs)
             {
-                Log.e(TAG, "Speed: " + distance + ", " + elapsedUs + " = "
-                        + distance * 36 / (elapsedUs / 100) + " km/h");
+                BlueBikeActivity parent = BlueBikeActivity.this;
+
+                // FIXME: don't hardcode metric units
+                parent.instSpeed = distance * 36 / (elapsedUs / 100);
+                // FIXME: trigger UI update
+                Log.d(TAG, "Speed: " + distance + ", " + elapsedUs + " = " + parent.instSpeed + " km/h");
             }
 
             @Override
             public void onCadenceUpdate(BlueBikeSensor sensor, int rotations, double elapsedUs)
             {
-                Log.e(TAG, "Cadence: " + rotations + ", " + elapsedUs + " = "
-                        + rotations * 60 / (elapsedUs / 1000000) + " rpm");
+                BlueBikeActivity parent = BlueBikeActivity.this;
+
+                parent.instCadence = rotations * 60 / (elapsedUs / 1000000);
+                // FIXME: trigger UI update
+                Log.e(TAG, "Cadence: " + rotations + ", " + elapsedUs + " = " + parent.instCadence  + " rpm");
             }
         };
+
+        startScan();
     }
 
     private void stopScan()
@@ -131,7 +156,7 @@ public class BlueBikeActivity extends Activity
         mBluetoothAdapter.stopLeScan(mLeScanCallback);
     }
 
-    public void startScan(View view)
+    private void startScan()
     {
         final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
 
@@ -165,7 +190,7 @@ public class BlueBikeActivity extends Activity
         mBluetoothAdapter.startLeScan(UUIDS, mLeScanCallback);
     }
 
-    public void startRead(View view)
+    private void startRead()
     {
         if (mBluetoothDevice == null) {
             Toast.makeText(this, R.string.msg_err_noscan, Toast.LENGTH_LONG).show();
@@ -173,6 +198,6 @@ public class BlueBikeActivity extends Activity
         }
 
         if (mSensor == null)
-            mSensor = new BlueBikeSensor(this, mBluetoothDevice, 622, mCallback);
+            mSensor = new BlueBikeSensor(this, mBluetoothDevice, 622 /* FIXME */, mCallback);
     }
 }

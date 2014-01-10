@@ -1,22 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+
+<RelativeLayout
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
-<Button xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/button_scan"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/button_scan"
-    android:onClick="startScan" />
-    />
-<Button xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/button_read"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/button_read"
-    android:onClick="startRead" />
-    />
-</LinearLayout>
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <GridLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:columnCount="2"
+        android:rowCount="2"
+        android:id="@+id/settingsBox"
+        android:layout_alignParentTop="true">
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/deviceList"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_columnSpan="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/device_label"
+            android:id="@+id/deviceLabel"
+            android:focusableInTouchMode="true"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_columnSpan="1"
+            android:layout_gravity="right"
+            android:labelFor="@id/deviceList" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/wheelSizeList"
+            android:layout_row="1"
+            android:layout_column="1"
+            android:layout_columnSpan="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/wheel_size_label"
+            android:id="@+id/wheelSizeLabel"
+            android:layout_row="1"
+            android:layout_column="0"
+            android:layout_columnSpan="1"
+            android:layout_gravity="right"
+            android:labelFor="@id/wheelSizeList" />
+    </GridLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Test"
+        android:id="@+id/speedView"
+        android:layout_below="@+id/speedLabel" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/speed_label"
+        android:id="@+id/speedLabel"
+        android:labelFor="@id/speedView"
+        android:layout_below="@+id/settingsBox" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test"
+        android:id="@+id/cadenceView"
+        android:layout_below="@+id/cadenceLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/cadence_label"
+        android:id="@+id/cadenceLabel"
+        android:labelFor="@id/cadenceView"
+        android:layout_below="@+id/speedView" />
+
+</RelativeLayout>
